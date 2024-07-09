@@ -15,12 +15,14 @@ fn main() {
     // Gonna add this of course
     let pool = ThreadPool::new(4);
 
-    for stream in listener.incoming() {
+    for stream in listener.incoming().take(2) {
         let stream = stream.unwrap();
 
         pool.execute(|| {
             handle_connection(stream);
         });
+
+        println!("Shutting Down");
     }
 }
 
@@ -49,4 +51,5 @@ fn handle_connection(mut stream: TcpStream) {
 
     // Write the stream data as a response to the client :D
     stream.write_all(response.as_bytes()).unwrap();
+    stream.flush().unwrap();
 }
