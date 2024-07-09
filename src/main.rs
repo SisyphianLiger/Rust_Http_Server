@@ -10,6 +10,7 @@ use http::ThreadPool;
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+    println!("Connected to 127.0.0.1:7878");
 
     // Gonna add this of course
     let pool = ThreadPool::new(4);
@@ -29,8 +30,6 @@ fn handle_connection(mut stream: TcpStream) {
 
     // Parse Request Line from buffer reader
     let request_line = buf_reader.lines().next().unwrap().unwrap();
-    let strlol = &request_line[..];
-    println!("{}", std::any::type_name_of_val(strlol));
 
     // If a good request then return status/filename for all others fail
     let (status_line, filename) = match request_line.as_str() {
